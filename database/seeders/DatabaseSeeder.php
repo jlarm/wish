@@ -17,42 +17,42 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Joe Lohr',
             'email' => 'emailme@joelohr.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('0628'),
             'role' => Role::PARENT,
         ]);
 
         User::factory()->create([
             'name' => 'Sherry Lohr',
             'email' => 'sherryalohr@email.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('0426'),
             'role' => Role::PARENT,
         ]);
 
         User::factory()->create([
             'name' => 'Kailee Lohr',
             'email' => 'kaileelohr@gmail.com',
-            'password' => bcrypt('password'),
+            'password' => bcrypt('0425'),
             'role' => Role::CHILD,
         ]);
 
         User::factory()->create([
             'name' => 'Becca Lohr',
-            'email' => 'beccalohr@gmail.com',
-            'password' => bcrypt('password'),
+            'email' => 'beccalohr4@gmail.com',
+            'password' => bcrypt('0319'),
             'role' => Role::CHILD,
         ]);
 
         User::factory()->create([
             'name' => 'Alissa Lohr',
-            'email' => 'alissalohr@gmail.com',
-            'password' => bcrypt('password'),
+            'email' => 'alissalohr01@gmail.com',
+            'password' => bcrypt('0103'),
             'role' => Role::CHILD,
         ]);
 
         User::factory()->create([
             'name' => 'Jacob Lohr',
-            'email' => 'jacoblohr@gmail.com',
-            'password' => bcrypt('password'),
+            'email' => 'jacobmlohr@gmail.com',
+            'password' => bcrypt('0326'),
             'role' => Role::CHILD,
         ]);
     }
