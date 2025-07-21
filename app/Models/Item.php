@@ -21,6 +21,9 @@ class Item extends Model
         return [
             'price' => MoneyCast::class,
             'purchased' => 'boolean',
+            'purchased_date' => 'date',
+            'delivered' => 'boolean',
+            'delivered_date' => 'date',
         ];
     }
 

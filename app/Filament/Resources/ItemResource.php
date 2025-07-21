@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Role;
 use App\Filament\Resources\ItemResource\Pages;
 use App\Filament\Resources\ItemResource\RelationManagers;
 use App\Models\Item;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -43,7 +45,37 @@ class ItemResource extends Resource
                             ->columnSpanFull(),
                         Forms\Components\TextInput::make('store')
                             ->columnSpanFull(),
+                        Forms\Components\FileUpload::make('image')
+                            ->image()
+                            ->imageEditor()
+                    ]),
+                Forms\Components\Section::make('Purchase Status')
+                    ->schema([
+                        Forms\Components\Toggle::make('purchased')
+                            ->label('Purchased')
+                            ->live()
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('purchased_by')
+                            ->label('Purchased By')
+                            ->options(User::pluck('name', 'id'))
+                            ->searchable()
+                            ->columnSpanFull()
+                            ->visible(fn (Forms\Get $get) => $get('purchased')),
+                        Forms\Components\DatePicker::make('purchased_date')
+                            ->label('Purchase Date')
+                            ->columnSpanFull()
+                            ->visible(fn (Forms\Get $get) => $get('purchased')),
+                        Forms\Components\Toggle::make('delivered')
+                            ->label('Delivered')
+                            ->live()
+                            ->columnSpanFull()
+                            ->visible(fn (Forms\Get $get) => $get('purchased')),
+                        Forms\Components\DatePicker::make('delivered_date')
+                            ->label('Delivery Date')
+                            ->columnSpanFull()
+                            ->visible(fn (Forms\Get $get) => $get('delivered')),
                     ])
+                    ->visible(fn () => in_array(auth()->user()?->role, [Role::PARENT, Role::RELATIVE], true)),
             ]);
     }
 
