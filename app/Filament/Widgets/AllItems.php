@@ -32,7 +32,7 @@ class AllItems extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Item::query())
+            ->query(Item::query()->where('user_id', '!=', auth()->id()))
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Person')

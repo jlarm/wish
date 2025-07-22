@@ -75,7 +75,10 @@ class ItemResource extends Resource
                             ->columnSpanFull()
                             ->visible(fn (Forms\Get $get) => $get('delivered')),
                     ])
-                    ->visible(fn () => in_array(auth()->user()?->role, [Role::PARENT, Role::RELATIVE], true)),
+                    ->visible(fn (?Item $record) => 
+                        in_array(auth()->user()?->role, [Role::PARENT, Role::RELATIVE], true) &&
+                        $record?->user_id !== auth()->id()
+                    ),
             ]);
     }
 
