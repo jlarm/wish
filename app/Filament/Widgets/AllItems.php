@@ -41,7 +41,7 @@ class AllItems extends BaseWidget
                     ->searchable(),
                 TextColumn::make('name')
                     ->tooltip(fn (Model $record): string => "{$record->name}")
-                    ->words(5)
+                    ->words(3)
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')
@@ -56,6 +56,11 @@ class AllItems extends BaseWidget
                     ->prefix('$'),
                 TextColumn::make('store')
                     ->sortable(),
+                IconColumn::make('link')
+                    ->label('Link')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->url(fn ($record) => $record->link)
+                    ->openUrlInNewTab(),    
             ])
             ->filters([
                 SelectFilter::make('user_id')

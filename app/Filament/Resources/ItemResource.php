@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Model;
 
 class ItemResource extends Resource
 {
@@ -87,6 +88,8 @@ class ItemResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->tooltip(fn (Model $record): string => "{$record->name}")
+                    ->words(3)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('size')
@@ -98,6 +101,11 @@ class ItemResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('store')
                     ->sortable(),
+                Tables\Columns\IconColumn::make('link')
+                    ->label('Link')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->url(fn ($record) => $record->link)
+                    ->openUrlInNewTab(),
             ])
             ->filters([
                 //
