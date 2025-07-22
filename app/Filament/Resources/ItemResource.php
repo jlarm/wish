@@ -121,7 +121,9 @@ class ItemResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('user_id', auth()->id());
+        return parent::getEloquentQuery()
+            ->where('user_id', auth()->id())
+            ->where('hidden', false);
     }
 
     public static function getPages(): array

@@ -24,6 +24,7 @@ class Item extends Model
             'purchased_date' => 'date',
             'delivered' => 'boolean',
             'delivered_date' => 'date',
+            'hidden' => 'boolean',
         ];
     }
 
