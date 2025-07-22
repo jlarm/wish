@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Red,
             ])
+            ->breadcrumbs(false)
             ->font('Poppins')
             ->favicon('https://fav.farm/🎁')
             ->databaseNotifications()
