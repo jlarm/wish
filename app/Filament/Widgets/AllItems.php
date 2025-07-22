@@ -32,7 +32,7 @@ class AllItems extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Item::query()->where('user_id', '!=', auth()->id()))
+            ->query(Item::query()->whereNot('user_id', auth()->id()))
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Person')
@@ -59,7 +59,8 @@ class AllItems extends BaseWidget
             ->filters([
                 SelectFilter::make('user_id')
                     ->label('User')
-                    ->options(User::pluck('name', 'id'))
+                    ->multiple()
+                    ->options(User::whereNot('id', auth()->id())->pluck('name', 'id'))
                     ->searchable(),
                 TernaryFilter::make('purchased'),
                 TernaryFilter::make('delivered'),
@@ -90,7 +91,7 @@ class AllItems extends BaseWidget
                                     ->live(),
                                 Forms\Components\Select::make('purchased_by')
                                     ->label('Purchased By')
-                                    ->options(User::pluck('name', 'id'))
+                                    ->options(User::whereNot('id', auth()->id())->pluck('name', 'id'))
                                     ->searchable()
                                     ->visible(fn (Forms\Get $get) => $get('purchased')),
                                 Forms\Components\DatePicker::make('purchased_date')
