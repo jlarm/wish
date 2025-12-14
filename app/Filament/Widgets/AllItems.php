@@ -68,6 +68,11 @@ class AllItems extends BaseWidget
                         default => null,
                     })
                     ->toggleable(),
+                TextColumn::make('purchasedBy.name')
+                    ->label('Bought By')
+                    ->placeholder('Not purchased')
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('size')
                     ->toggleable(),
                 TextColumn::make('color')
