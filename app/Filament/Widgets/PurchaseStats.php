@@ -9,6 +9,8 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class PurchaseStats extends BaseWidget
 {
+    protected static ?int $sort = 1;
+
     public static function canView(): bool
     {
         return in_array(auth()->user()?->role, [Role::PARENT, Role::RELATIVE], true);

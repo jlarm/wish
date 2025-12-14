@@ -21,6 +21,8 @@ class AllItems extends BaseWidget
 {
     protected int|string|array $columnSpan = 'full';
 
+    protected static ?int $sort = 2;
+
     public static function canView(): bool
     {
         return in_array(auth()->user()?->role, [Role::PARENT, Role::RELATIVE], true);
