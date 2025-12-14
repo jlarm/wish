@@ -90,6 +90,11 @@ class AllItems extends BaseWidget
                     ->options(User::whereNot('id', auth()->id())->pluck('name', 'id'))
                     ->searchable(),
                 TernaryFilter::make('purchased'),
+                SelectFilter::make('purchased_by')
+                    ->label('Purchased By')
+                    ->multiple()
+                    ->options(User::pluck('name', 'id'))
+                    ->searchable(),
                 TernaryFilter::make('delivered'),
             ])
             ->headerActions([
