@@ -3,27 +3,23 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\Role;
-use App\Filament\Resources\ItemResource;
 use App\Models\Item;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AllItems extends BaseWidget
 {
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public static function canView(): bool
     {
@@ -34,6 +30,7 @@ class AllItems extends BaseWidget
     {
         return $table
             ->query(Item::query()->whereNot('user_id', auth()->id()))
+            ->defaultSort('purchased', 'asc')
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Person')
@@ -46,6 +43,18 @@ class AllItems extends BaseWidget
                     ->searchable(),
                 ImageColumn::make('image')
                     ->circular(),
+                TextColumn::make('status')
+                    ->badge()
+                    ->getStateUsing(fn (Model $record): string => match (true) {
+                        $record->delivered => 'Delivered',
+                        $record->purchased => 'Purchased',
+                        default => 'Available',
+                    })
+                    ->color(fn (string $state): string => match ($state) {
+                        'Delivered' => 'success',
+                        'Purchased' => 'warning',
+                        'Available' => 'gray',
+                    }),
                 IconColumn::make('purchased')
                     ->tooltip(fn (Model $record): string => "Purchased On {$record->purchased_date?->format('F j, Y')}"),
                 IconColumn::make('delivered')
@@ -60,7 +69,7 @@ class AllItems extends BaseWidget
                     ->label('Link')
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->url(fn ($record) => $record->link)
-                    ->openUrlInNewTab(),    
+                    ->openUrlInNewTab(),
             ])
             ->filters([
                 SelectFilter::make('user_id')
@@ -100,6 +109,7 @@ class AllItems extends BaseWidget
                     ])
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['hidden'] = true;
+
                         return $data;
                     })
                     ->successNotificationTitle('Item added successfully'),
