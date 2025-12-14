@@ -86,11 +86,10 @@ class ItemResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->tooltip(fn (Model $record): string => "{$record->name}")
-                    ->words(3)
+                    ->limit(30)
+                    ->tooltip(fn (Model $record): string => $record->name)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('size')

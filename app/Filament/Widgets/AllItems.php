@@ -40,6 +40,8 @@ class AllItems extends BaseWidget
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('name')
+                    ->limit(30)
+                    ->tooltip(fn (Model $record): string => $record->name)
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
