@@ -65,6 +65,7 @@ class AllItems extends BaseWidget
                 TextColumn::make('price')
                     ->prefix('$'),
                 TextColumn::make('store')
+                    ->searchable()
                     ->sortable(),
                 IconColumn::make('link')
                     ->label('Link')
