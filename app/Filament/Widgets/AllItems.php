@@ -35,68 +35,49 @@ class AllItems extends BaseWidget
         return $table
             ->query(Item::query()->whereNot('user_id', auth()->id()))
             ->defaultSort('purchased', 'asc')
-            ->striped()
             ->columns([
                 Split::make([
+                    TextColumn::make('user.name')
+                        ->label('Person')
+                        ->sortable()
+                        ->searchable(),
+                    TextColumn::make('name')
+                        ->searchable()
+                        ->sortable(),
                     ImageColumn::make('image')
                         ->circular()
-                        ->size(40)
-                        ->visibleFrom('md'),
-                    Stack::make([
-                        TextColumn::make('user.name')
-                            ->label('Person')
-                            ->sortable()
-                            ->searchable()
-                            ->weight('bold'),
-                        TextColumn::make('name')
-                            ->searchable()
-                            ->sortable()
-                            ->size('sm')
-                            ->color('gray'),
-                        Split::make([
-                            TextColumn::make('status')
-                                ->badge()
-                                ->getStateUsing(fn (Model $record): string => match (true) {
-                                    $record->delivered => 'Delivered',
-                                    $record->purchased => 'Purchased',
-                                    default => 'Available',
-                                })
-                                ->color(fn (string $state): string => match ($state) {
-                                    'Delivered' => 'success',
-                                    'Purchased' => 'warning',
-                                    'Available' => 'gray',
-                                })
-                                ->tooltip(fn (Model $record): ?string => match (true) {
-                                    $record->delivered && $record->delivered_date => "Delivered on {$record->delivered_date->format('M j, Y')}",
-                                    $record->purchased && $record->purchased_date => "Purchased on {$record->purchased_date->format('M j, Y')}",
-                                    default => null,
-                                }),
-                            TextColumn::make('price')
-                                ->prefix('$')
-                                ->sortable()
-                                ->weight('bold'),
-                        ]),
-                    ]),
-                    Stack::make([
-                        TextColumn::make('size')
-                            ->icon('heroicon-o-tag')
-                            ->placeholder('—'),
-                        TextColumn::make('color')
-                            ->icon('heroicon-o-swatch')
-                            ->placeholder('—'),
-                        TextColumn::make('store')
-                            ->icon('heroicon-o-building-storefront')
-                            ->searchable()
-                            ->sortable()
-                            ->placeholder('—'),
-                    ])->visibleFrom('md'),
+                        ->grow(false),
+                    TextColumn::make('status')
+                        ->badge()
+                        ->getStateUsing(fn (Model $record): string => match (true) {
+                            $record->delivered => 'Delivered',
+                            $record->purchased => 'Purchased',
+                            default => 'Available',
+                        })
+                        ->color(fn (string $state): string => match ($state) {
+                            'Delivered' => 'success',
+                            'Purchased' => 'warning',
+                            'Available' => 'gray',
+                        })
+                        ->tooltip(fn (Model $record): ?string => match (true) {
+                            $record->delivered && $record->delivered_date => "Delivered on {$record->delivered_date->format('M j, Y')}",
+                            $record->purchased && $record->purchased_date => "Purchased on {$record->purchased_date->format('M j, Y')}",
+                            default => null,
+                        }),
+                    TextColumn::make('size'),
+                    TextColumn::make('color'),
+                    TextColumn::make('price')
+                        ->prefix('$')
+                        ->sortable(),
+                    TextColumn::make('store')
+                        ->searchable()
+                        ->sortable(),
                     IconColumn::make('link')
-                        ->label('Link')
                         ->icon('heroicon-o-arrow-top-right-on-square')
                         ->url(fn ($record) => $record->link)
                         ->openUrlInNewTab()
-                        ->alignEnd(),
-                ]),
+                        ->grow(false),
+                ])->from('md'),
             ])
             ->filters([
                 SelectFilter::make('user_id')
