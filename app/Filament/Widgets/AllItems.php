@@ -10,6 +10,8 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -35,57 +37,66 @@ class AllItems extends BaseWidget
             ->defaultSort('purchased', 'asc')
             ->striped()
             ->columns([
-                TextColumn::make('user.name')
-                    ->label('Person')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('name')
-                    ->tooltip(fn (Model $record): string => "{$record->name}")
-                    ->words(3)
-                    ->sortable()
-                    ->searchable(),
-                ImageColumn::make('image')
-                    ->circular()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
-                TextColumn::make('status')
-                    ->badge()
-                    ->getStateUsing(fn (Model $record): string => match (true) {
-                        $record->delivered => 'Delivered',
-                        $record->purchased => 'Purchased',
-                        default => 'Available',
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'Delivered' => 'success',
-                        'Purchased' => 'warning',
-                        'Available' => 'gray',
-                    })
-                    ->tooltip(fn (Model $record): ?string => match (true) {
-                        $record->delivered && $record->delivered_date => "Delivered on {$record->delivered_date->format('M j, Y')}",
-                        $record->purchased && $record->purchased_date => "Purchased on {$record->purchased_date->format('M j, Y')}",
-                        default => null,
-                    }),
-                TextColumn::make('size')
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
-                TextColumn::make('color')
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
-                TextColumn::make('price')
-                    ->prefix('$')
-                    ->sortable()
-                    ->toggleable(),
-                TextColumn::make('store')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable()
-                    ->toggledHiddenByDefault(),
-                IconColumn::make('link')
-                    ->label('Link')
-                    ->icon('heroicon-o-arrow-top-right-on-square')
-                    ->url(fn ($record) => $record->link)
-                    ->openUrlInNewTab()
-                    ->toggleable(),
+                Split::make([
+                    ImageColumn::make('image')
+                        ->circular()
+                        ->size(40)
+                        ->visibleFrom('md'),
+                    Stack::make([
+                        TextColumn::make('user.name')
+                            ->label('Person')
+                            ->sortable()
+                            ->searchable()
+                            ->weight('bold'),
+                        TextColumn::make('name')
+                            ->searchable()
+                            ->sortable()
+                            ->size('sm')
+                            ->color('gray'),
+                        Split::make([
+                            TextColumn::make('status')
+                                ->badge()
+                                ->getStateUsing(fn (Model $record): string => match (true) {
+                                    $record->delivered => 'Delivered',
+                                    $record->purchased => 'Purchased',
+                                    default => 'Available',
+                                })
+                                ->color(fn (string $state): string => match ($state) {
+                                    'Delivered' => 'success',
+                                    'Purchased' => 'warning',
+                                    'Available' => 'gray',
+                                })
+                                ->tooltip(fn (Model $record): ?string => match (true) {
+                                    $record->delivered && $record->delivered_date => "Delivered on {$record->delivered_date->format('M j, Y')}",
+                                    $record->purchased && $record->purchased_date => "Purchased on {$record->purchased_date->format('M j, Y')}",
+                                    default => null,
+                                }),
+                            TextColumn::make('price')
+                                ->prefix('$')
+                                ->sortable()
+                                ->weight('bold'),
+                        ]),
+                    ]),
+                    Stack::make([
+                        TextColumn::make('size')
+                            ->icon('heroicon-o-tag')
+                            ->placeholder('—'),
+                        TextColumn::make('color')
+                            ->icon('heroicon-o-swatch')
+                            ->placeholder('—'),
+                        TextColumn::make('store')
+                            ->icon('heroicon-o-building-storefront')
+                            ->searchable()
+                            ->sortable()
+                            ->placeholder('—'),
+                    ])->visibleFrom('md'),
+                    IconColumn::make('link')
+                        ->label('Link')
+                        ->icon('heroicon-o-arrow-top-right-on-square')
+                        ->url(fn ($record) => $record->link)
+                        ->openUrlInNewTab()
+                        ->alignEnd(),
+                ]),
             ])
             ->filters([
                 SelectFilter::make('user_id')
