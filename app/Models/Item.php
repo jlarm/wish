@@ -44,4 +44,9 @@ class Item extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function purchasedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'purchased_by');
+    }
 }
