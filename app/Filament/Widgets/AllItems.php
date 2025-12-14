@@ -11,6 +11,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
@@ -96,9 +97,9 @@ class AllItems extends BaseWidget
             ])
             ->filters([
                 SelectFilter::make('user_id')
-                    ->label('User')
+                    ->label('Kid')
                     ->multiple()
-                    ->options(User::whereNot('id', auth()->id())->pluck('name', 'id'))
+                    ->options(User::where('role', Role::CHILD)->pluck('name', 'id'))
                     ->searchable(),
                 TernaryFilter::make('purchased'),
                 SelectFilter::make('purchased_by')
@@ -107,7 +108,7 @@ class AllItems extends BaseWidget
                     ->options(User::pluck('name', 'id'))
                     ->searchable(),
                 TernaryFilter::make('delivered'),
-            ])
+            ], layout: FiltersLayout::AboveContent)
             ->headerActions([
                 CreateAction::make()
                     ->label('Add Item for Someone')
