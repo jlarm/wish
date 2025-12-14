@@ -44,7 +44,8 @@ class AllItems extends BaseWidget
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')
-                    ->circular(),
+                    ->circular()
+                    ->toggleable(),
                 TextColumn::make('status')
                     ->badge()
                     ->getStateUsing(fn (Model $record): string => match (true) {
@@ -62,18 +63,23 @@ class AllItems extends BaseWidget
                         $record->purchased && $record->purchased_date => "Purchased on {$record->purchased_date->format('M j, Y')}",
                         default => null,
                     }),
-                TextColumn::make('size'),
-                TextColumn::make('color'),
+                TextColumn::make('size')
+                    ->toggleable(),
+                TextColumn::make('color')
+                    ->toggleable(),
                 TextColumn::make('price')
-                    ->prefix('$'),
+                    ->prefix('$')
+                    ->toggleable(),
                 TextColumn::make('store')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 IconColumn::make('link')
                     ->label('Link')
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->url(fn ($record) => $record->link)
-                    ->openUrlInNewTab(),
+                    ->openUrlInNewTab()
+                    ->toggleable(),
             ])
             ->filters([
                 SelectFilter::make('user_id')
