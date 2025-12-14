@@ -33,6 +33,7 @@ class AllItems extends BaseWidget
         return $table
             ->query(Item::query()->whereNot('user_id', auth()->id()))
             ->defaultSort('purchased', 'asc')
+            ->striped()
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Person')
@@ -45,7 +46,8 @@ class AllItems extends BaseWidget
                     ->searchable(),
                 ImageColumn::make('image')
                     ->circular()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 TextColumn::make('status')
                     ->badge()
                     ->getStateUsing(fn (Model $record): string => match (true) {
@@ -64,16 +66,20 @@ class AllItems extends BaseWidget
                         default => null,
                     }),
                 TextColumn::make('size')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 TextColumn::make('color')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 TextColumn::make('price')
                     ->prefix('$')
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('store')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
                 IconColumn::make('link')
                     ->label('Link')
                     ->icon('heroicon-o-arrow-top-right-on-square')
