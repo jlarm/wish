@@ -54,11 +54,12 @@ class AllItems extends BaseWidget
                         'Delivered' => 'success',
                         'Purchased' => 'warning',
                         'Available' => 'gray',
+                    })
+                    ->tooltip(fn (Model $record): ?string => match (true) {
+                        $record->delivered && $record->delivered_date => "Delivered on {$record->delivered_date->format('M j, Y')}",
+                        $record->purchased && $record->purchased_date => "Purchased on {$record->purchased_date->format('M j, Y')}",
+                        default => null,
                     }),
-                IconColumn::make('purchased')
-                    ->tooltip(fn (Model $record): string => "Purchased On {$record->purchased_date?->format('F j, Y')}"),
-                IconColumn::make('delivered')
-                    ->tooltip(fn (Model $record): string => "Delivered On {$record->delivered_date?->format('F j, Y')}"),
                 TextColumn::make('size'),
                 TextColumn::make('color'),
                 TextColumn::make('price')
