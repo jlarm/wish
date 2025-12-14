@@ -76,7 +76,7 @@ class ItemResource extends Resource
                             ->columnSpanFull()
                             ->visible(fn (Forms\Get $get) => $get('delivered')),
                     ])
-                    ->visible(fn (?Item $record) => 
+                    ->visible(fn (?Item $record) =>
                         in_array(auth()->user()?->role, [Role::PARENT, Role::RELATIVE], true) &&
                         $record?->user_id !== auth()->id()
                     ),
@@ -100,6 +100,7 @@ class ItemResource extends Resource
                     ->prefix('$')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('store')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('link')
                     ->label('Link')
