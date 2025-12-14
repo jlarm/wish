@@ -40,8 +40,10 @@ class AllItems extends BaseWidget
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('name')
+                    ->label('Name')
+                    ->formatStateUsing(fn (string $state): string => \Illuminate\Support\Str::title($state))
                     ->limit(30)
-                    ->tooltip(fn (Model $record): string => $record->name)
+                    ->tooltip(fn (Model $record): string => \Illuminate\Support\Str::title($record->name))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
@@ -75,6 +77,8 @@ class AllItems extends BaseWidget
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('store')
+                    ->label('Store')
+                    ->formatStateUsing(fn (?string $state): ?string => $state ? \Illuminate\Support\Str::title($state) : null)
                     ->searchable()
                     ->sortable()
                     ->toggleable(),

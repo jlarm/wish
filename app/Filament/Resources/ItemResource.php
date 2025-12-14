@@ -88,8 +88,10 @@ class ItemResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Name')
+                    ->formatStateUsing(fn (string $state): string => \Illuminate\Support\Str::title($state))
                     ->limit(30)
-                    ->tooltip(fn (Model $record): string => $record->name)
+                    ->tooltip(fn (Model $record): string => \Illuminate\Support\Str::title($record->name))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('size')
@@ -100,6 +102,8 @@ class ItemResource extends Resource
                     ->prefix('$')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('store')
+                    ->label('Store')
+                    ->formatStateUsing(fn (?string $state): ?string => $state ? \Illuminate\Support\Str::title($state) : null)
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('link')
