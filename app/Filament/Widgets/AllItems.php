@@ -169,7 +169,7 @@ class AllItems extends BaseWidget
                                     ->live(),
                                 Forms\Components\Select::make('purchased_by')
                                     ->label('Purchased By')
-                                    ->options(User::whereNot('id', auth()->id())->pluck('name', 'id'))
+                                    ->options(User::pluck('name', 'id'))
                                     ->searchable()
                                     ->visible(fn (Forms\Get $get) => $get('purchased')),
                                 Forms\Components\DatePicker::make('purchased_date')
